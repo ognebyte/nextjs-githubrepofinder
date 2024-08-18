@@ -1,37 +1,38 @@
-$header-background-color: #00838f
-$search-input-background-color: #f2f2f2
-$border-radius: 4px
-$primary-color: #000000DE
-$placeholder-color: #828282
+@use '../utils/variables' as var
 
 
 .header
-  display: flex
-  align-items: center
-  width: 100%
-  padding-inline: 32px
-  padding-block: 19px
-  background-color: $header-background-color
+    display: flex
+    align-items: center
+    width: 100%
+    padding-inline: 32px
+    padding-block: 19px
+    background-color: var.$header-background-color
 
-.searchContainer
-  display: inline-flex
-  width: 100%
-  height: 42px
-  gap: 8px
 
-  .searchInput
+.headerInner
+    display: inline-flex
+    max-width: var.$max-width
+    width: 100%
+    height: 42px
+    margin: auto
+    gap: var.$space-default
+
+
+.searchInput
     width: 100%
     max-width: 912px
     height: 100%
-    padding-inline: 16px
-    background-color: $search-input-background-color
-    color: $primary-color
+    padding-inline: var.$space-default * 2
+    background-color: var.$search-input-background-color
     border: none
-    border-radius: $border-radius
+    border-radius: var.$border-radius
+    outline: none
+    font-weight: 500
 
     &::placeholder
-      color: $placeholder-color
+        color: var.$placeholder-color
 
-  .searchButton
-    height: 100%
-    border-radius: $border-radius
+    .searchButton
+        height: 100%
+        border-radius: var.$border-radius

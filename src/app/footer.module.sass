@@ -1,8 +1,12 @@
-$second-color: #4f4f4f
+@use '../utils/variables' as var
 
 
 .footer
-  width: 100%
-  height: 32px
-  background-color: $second-color
-  margin-bottom: auto
+    width: 100%
+    height: 32px
+    background-color: var.$second-color
+    margin-bottom: auto
+
+    .footerInner
+        max-width: var.$max-width
+        margin: auto

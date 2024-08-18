@@ -1,21 +1,34 @@
-$max-width: 1440px
+@use '../utils/variables' as var
 
 
 *
-  box-sizing: border-box
-  padding: 0
-  margin: 0
+    box-sizing: border-box
+    padding: 0
+    margin: 0
+
 
 html,
 body
-  max-width: $max-width
-  min-height: 100vh
-  margin: auto
-  overflow-x: hidden
+    position: relative
+    min-height: 100vh
+    color: var.$primary-color
+    overflow-x: hidden
+
 
 body
-  background: white
+    display: grid
+    grid-template-rows: auto 1fr auto
+    background: white
+
 
 a
-  color: inherit
-  text-decoration: none
+    text-decoration: none
+
+h2
+    font-size: var.$h2-font-size
+
+h3
+    font-size: var.$h3-font-size
+
+p
+    font-size: var.$p-font-size
