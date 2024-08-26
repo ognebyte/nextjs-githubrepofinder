@@ -1,5 +1,35 @@
-@use '../utils/variables' as var
+:root
+    --primary-background-color: #ffffff
+    --primary-color: #000000DE
+    --second-color: #4f4f4f
+    --placeholder-color: #828282
 
+    --header-background-color: #00838f
+    --search-input-background-color: #f2f2f2
+
+
+    --page-max-width: 1440px
+    --page-min-width: 300px
+    --header-input-height: 42px
+    --border-radius: 4px
+    --space-default: 8px
+    --padding-default: 8px
+
+    --h2-font-size: 32px
+    --h3-font-size: 24px
+    --p-font-size: 14px
+
+
+    @media (width > 480px)
+        --padding-default: 12px
+        --h2-font-size: 40px
+        --h3-font-size: 28px
+
+
+    @media (width > 768px)
+        --padding-default: 16px
+        --h2-font-size: 48px
+        --h3-font-size: 32px
 
 *
     box-sizing: border-box
@@ -10,8 +40,10 @@
 html,
 body
     position: relative
-    min-height: 100vh
-    color: var.$primary-color
+    min-width: var(--page-min-width)
+    min-height: 500px
+    height: 100vh
+    color: var(--primary-color)
     overflow-x: hidden
 
 
@@ -21,14 +53,11 @@ body
     background: white
 
 
-a
-    text-decoration: none
-
 h2
-    font-size: var.$h2-font-size
+    font-size: var(--h2-font-size)
 
 h3
-    font-size: var.$h3-font-size
+    font-size: var(--h3-font-size)
 
-p
-    font-size: var.$p-font-size
+a, p
+    font-size: var(--p-font-size)

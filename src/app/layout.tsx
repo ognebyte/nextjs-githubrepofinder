@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.sass";
+import StoreProvider from "./storeProvider";
 
 const roboto = Roboto({
     weight: '400',
@@ -18,8 +19,10 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="ru">
-            <body className={roboto.className}>{children}</body>
-        </html>
+        <StoreProvider>
+            <html lang="ru">
+                <body className={roboto.className}>{children}</body>
+            </html>
+        </StoreProvider>
     );
 }

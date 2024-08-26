@@ -1,38 +1,39 @@
-@use '../utils/variables' as var
-
-
 .header
     display: flex
     align-items: center
     width: 100%
-    padding-inline: 32px
-    padding-block: 19px
-    background-color: var.$header-background-color
+    padding-inline: calc(var(--padding-default) * 2)
+    padding-block: var(--padding-default)
+    background-color: var(--header-background-color)
 
 
 .headerInner
-    display: inline-flex
-    max-width: var.$max-width
+    display: flex
+    flex-direction: column
+    max-width: var(--page-max-width)
     width: 100%
-    height: 42px
+    height: auto
     margin: auto
-    gap: var.$space-default
+    gap: var(--space-default)
+
+    @media (width > 768px)
+        flex-direction: row
 
 
 .searchInput
     width: 100%
     max-width: 912px
-    height: 100%
-    padding-inline: var.$space-default * 2
-    background-color: var.$search-input-background-color
+    height: var(--header-input-height)
+    padding-inline: var(--padding-default)
+    background-color: var(--search-input-background-color)
     border: none
-    border-radius: var.$border-radius
+    border-radius: var(--border-radius)
     outline: none
     font-weight: 500
 
     &::placeholder
-        color: var.$placeholder-color
+        color: var(--placeholder-color)
 
-    .searchButton
-        height: 100%
-        border-radius: var.$border-radius
+.searchButton
+    height: var(--header-input-height)
+    border-radius: var(--border-radius)

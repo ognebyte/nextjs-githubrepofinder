@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, gridClasses } from '@mui/x-data-grid';
 import Chip from '@mui/material/Chip';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/lib/store';
 
-import { fetchGitHubData } from '../lib/githubGraphQL';
-import { SEARCH_REPOSITORIES } from '../queries/searchRepositories';
-import { Repository } from '../types/github';
+import { Repository } from '@/types/github';
 
 import styles from "./page.module.sass";
 import Header from "./header";
@@ -14,7 +14,6 @@ import Footer from "./footer";
 import StarIcon from '@/public/star';
 
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', hideable: false },
     { field: 'name', headerName: 'Название', minWidth: 150, flex: 1, },
     {
         field: 'languages', headerName: 'Язык', minWidth: 150, flex: 1,
@@ -30,35 +29,17 @@ const columns: GridColDef[] = [
 
 
 export default function Home() {
-    const [repositories, setRepositories] = useState<Repository[]>([]);
+    const repositories = useSelector((state: RootState) => state.search.repositories);
+    const loading = useSelector((state: RootState) => state.search.loading);
     const [repository, setRepository] = useState<Repository>();
-    const [loading, setLoading] = useState<boolean>(false);
     const [searched, setSearched] = useState<boolean>(false);
-
-    const handleSearch = async (query: string) => {
-        setLoading(true);
-        setSearched(true)
-        try {
-            await fetchGitHubData(SEARCH_REPOSITORIES, {
-                query,
-                first: 100,
-            }).then(
-                (data: any) => {
-                    setRepositories(data.search.edges.map((item: { node: any; }) => item.node))
-                }
-            )
-        } catch (error) {
-            console.error('Error fetching repositories:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     return (
         <>
-            <Header onSearch={handleSearch} loading={loading} />
+            <Header searched={() => setSearched(true)} />
+
             <main className={styles.main}>
-                {!searched ? <p className={[styles.absoluteCenter, styles.mainIntroText].join(' ')}>Добро пожаловать!</p> :
+                {!searched ? <h2 className={[styles.absoluteCenter, styles.mainIntroText].join(' ')}>Добро пожаловать!</h2> :
                     <div className={styles.mainInner}>
                         <div className={styles.reposContainer}>
                             <h2>Результаты поиска</h2>
@@ -68,6 +49,7 @@ export default function Home() {
                                     loading={loading}
                                     rows={repositories}
                                     columns={columns}
+                                    getRowId={row => row.id}
                                     initialState={{
                                         pagination: { paginationModel: { page: 0, pageSize: 10 } },
                                         columns: { columnVisibilityModel: { id: false } }
@@ -76,16 +58,20 @@ export default function Home() {
                                     onRowClick={(params) => setRepository(params.row)}
                                     sx={{
                                         border: 0,
-                                        '& .MuiDataGrid-footerContainer': { border: 0 }
+                                        [`& .${gridClasses.footerContainer}`]: { border: 0 },
+                                        [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]: { outline: 'none' },
+                                        [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]: { outline: 'none' },
                                     }}
                                 />
                             </div>
                         </div>
+
                         <aside className={styles.repoContent}>
                             {!repository ? <p className={[styles.absoluteCenter, styles.repoIntroText].join(' ')}>Выберите репозиторий</p> :
                                 <>
                                     <div className={styles.repoMainInfo}>
-                                        <h3>{repository.name}</h3>
+                                        <h3 className={styles.repoIntroText}>{repository.name}</h3>
+                                        <a className={styles.repoUrl} href={repository.url} target='_blank'>{repository.url}</a>
                                         <div className={styles.repoStarsContainer}>
                                             <Chip color='primary' label={repository.languages.edges.length != 0 ? repository.languages.edges[0].node.name : 'Н/Д'} />
                                             <div className={styles.repoStars}>
@@ -96,18 +82,21 @@ export default function Home() {
                                         {repository.languages.edges.length == 0 ? null :
                                             <div className={styles.repoLanguages}>
                                                 {repository.languages.edges.map((item: any) =>
-                                                    <Chip label={item.node.name} />
+                                                    <Chip label={item.node.name} key={item.node.name} />
                                                 )}
                                             </div>
                                         }
                                     </div>
-                                    <p>{repository.description}</p>
+                                    {!repository.description ? null :
+                                        <p>{repository.description}</p>
+                                    }
                                 </>
                             }
                         </aside>
                     </div>
                 }
             </main>
+
             <Footer />
         </>
     );
